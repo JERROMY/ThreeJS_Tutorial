@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { BasicShaderMaterial } from '../materials/MaterialsBasic.js';
-import { shadersMap, loadShader } from '../ShaderBasic.js';
+import { GrassShaderMaterial } from '../materials/MaterialsGrass.js';
+import { shadersMap, loadShader } from '../ShaderGrass.js';
+import { GrassField } from './grass.js';
 
 console.log( "Three JS Ready " + THREE.REVISION )
 
@@ -10,6 +11,7 @@ let scene;
 let renderer;
 
 let box;
+let grassField;
 
 loadShader( start );
 
@@ -30,15 +32,18 @@ function init(){
     helper.visible = true;
 
 
-    const boxGeo = new THREE.BoxGeometry( 1, 1, 1 );
-	//const boxMat = new THREE.MeshBasicMaterial( { color: 0xCCCCCC, wireframe: true } );
+    // const boxGeo = new THREE.BoxGeometry( 1, 1, 1 );
+	// //const boxMat = new THREE.MeshBasicMaterial( { color: 0xCCCCCC, wireframe: true } );
+    // const basicMat = GrassShaderMaterial( shadersMap );
+	// const boxMesh = new THREE.Mesh( boxGeo, basicMat );
+    // box = boxMesh;
+	// group.add( boxMesh );
+    // box.visible = false;
 
-    const basicMat = BasicShaderMaterial( shadersMap );
+    grassField = new GrassField();
+    scene.add( grassField );
 
-
-	const boxMesh = new THREE.Mesh( boxGeo, basicMat );
-    box = boxMesh;
-	group.add( boxMesh );
+    
 
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -49,6 +54,8 @@ function init(){
     const controls = new OrbitControls( camera, renderer.domElement );
 	controls.minDistance = 2;
 	controls.maxDistance = 40;
+
+
 
     window.addEventListener( 'resize', onWindowResize );
 
@@ -69,17 +76,19 @@ function onWindowResize() {
 }
 
 
-function animate() {
+function animate( deltaTime ) {
 
     requestAnimationFrame( animate );
-    render();
+    render( deltaTime );
 
 }
 
-function render(){
+function render( dt ){
 
-    box.rotation.y += 0.01;
+   //box.rotation.y += 0.01;
 
-
+    if( grassField ){
+        grassField.update( dt )
+    }
     renderer.render( scene, camera );
 }
