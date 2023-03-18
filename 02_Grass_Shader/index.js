@@ -29,7 +29,7 @@ function init(){
     const helper = new THREE.GridHelper( 10, 10 );
 	//helper.rotation.x = Math.PI / 2;
 	group.add( helper );
-    helper.visible = true;
+    helper.visible = false;
 
 
     // const boxGeo = new THREE.BoxGeometry( 1, 1, 1 );
