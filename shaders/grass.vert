@@ -12,7 +12,6 @@ uniform float time;
 
 varying vec2 vUv;
 varying vec3 vPosition;
-varying vec3 vNormal;
 varying float vAngle;
 
 vec4 quat_from_axis_angle(vec3 axis, float angle){ 
@@ -42,19 +41,23 @@ void main()
     vec3 upDir = vec3(0.0, 1.0, 0.0);
 
     vec3 finalPosi = position;
-    finalPosi.y += 0.5;
     finalPosi.x *= 0.1;
+    finalPosi.y *= 1.0;
+    finalPosi.y += 0.5;
 
     
 
     finalPosi = rotate_vertex_position(finalPosi, upDir, vAngle);
 
     if( finalPosi.y > 0.5 ){
-        finalPosi.x = ( finalPosi.x + sin( time / 1000.0 * ( vAngle * 0.01 )  ) * 0.2 );
-        finalPosi.z = ( finalPosi.z + cos( time / 1000.0 * ( vAngle * 0.01 )  ) * 0.2 );
+        finalPosi.x = ( finalPosi.x + sin( time / 1000.0 * ( vAngle * 0.01 )  ) * 0.05 );
+        finalPosi.z = ( finalPosi.z + cos( time / 1000.0 * ( vAngle * 0.01 )  ) * 0.05 );
     }
+
+    
     
     finalPosi = terrPosi + finalPosi;
+    
 
     
 
