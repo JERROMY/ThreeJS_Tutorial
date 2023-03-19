@@ -57,10 +57,10 @@ class GrassField extends THREE.Group {
         // this.indexs.push(3);
         // this.indexs.push(0);
 
-        // this.uvs.push(0.0, 0.0);
         // this.uvs.push(1.0, 0.0);
-        // this.uvs.push(1.0, 1.0);
+        // this.uvs.push(0.0, 0.0);
         // this.uvs.push(0.0, 1.0);
+        // this.uvs.push(1.0, 1.0);
 
         for ( let i = 0; i < this.instances; i++ ) {
 

@@ -12,6 +12,8 @@ class GrassField extends THREE.Group {
         this.axesHelper = new THREE.AxesHelper( 1 );
         this.add( this.axesHelper );
 
+        this.grassMat = new THREE.MeshBasicMaterial( { color: 0x00FF00 } );
+
 
     }
 
