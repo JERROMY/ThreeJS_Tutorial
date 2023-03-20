@@ -13,9 +13,9 @@ class GrassField extends THREE.Group {
         this.add( this.axesHelper );
 
         this.instances = 50000;
-        this.w = 10;
-        this.d = 10;
-        this.h = 0;
+        this.w = 10; //x range
+        this.d = 10; //z range
+        this.h = 0;  //y range
 
         this.terrPosis = [];
         this.terrNorms = [];
