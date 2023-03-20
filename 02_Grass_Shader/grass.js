@@ -105,7 +105,7 @@ class GrassField extends THREE.Group {
         this.grassParticles = new THREE.Mesh( this.grassGeo, grassMat );
         this.grassParticles.frustumCulled = false;
         this.add( this.grassParticles );
-        this.scale.y = 0.25;
+        //this.scale.y = 0.25;
 
 
 
