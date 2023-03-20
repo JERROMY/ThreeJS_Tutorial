@@ -2,9 +2,16 @@ import * as THREE from 'three';
 
 function GrassShaderMaterial( shaders ){
 
-    
+    const grassMaskTex = new THREE.TextureLoader().load( '../textures/grass.jpg' );
+    const grassDiffTex = new THREE.TextureLoader().load( '../textures/grass_diffuse.jpg' );
+
     
     const uniforms = {
+    
+        time: { value: 0 },
+        grassMaskTex: { value: grassMaskTex },
+        grassDiffTex: { value: grassDiffTex },
+    
     };
 
     const Grass_VS = shaders.get('Grass_VS');

@@ -26,14 +26,11 @@ function init(){
     const group = new THREE.Group();
 	scene.add( group );
 
-    const helper = new THREE.GridHelper( 10, 10 );
-	//helper.rotation.x = Math.PI / 2;
-	group.add( helper );
-    helper.visible = true;
+    const gridHelper = new THREE.GridHelper( 10, 10 );
+    scene.add( gridHelper );
 
     grassField = new GrassField();
     scene.add( grassField );
-
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setPixelRatio( window.devicePixelRatio );
