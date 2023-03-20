@@ -31,6 +31,9 @@ function init(){
 	group.add( helper );
     helper.visible = true;
 
+    grassField = new GrassField();
+    scene.add( grassField );
+
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setPixelRatio( window.devicePixelRatio );
@@ -41,8 +44,7 @@ function init(){
 	controls.minDistance = 2;
 	controls.maxDistance = 40;
 
-    grassField = new GrassField();
-    scene.add( grassField );
+    
 
     window.addEventListener( 'resize', onWindowResize );
 
