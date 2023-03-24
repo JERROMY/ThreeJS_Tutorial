@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { BasicShaderMaterial } from '../materials/MaterialsBasic.js';
-import { shadersMap, loadShader } from '../ShaderBasic.js';
+import { shadersMap, loadShader } from '../shaders/ShaderBasic.js';
 
 console.log( "Three JS Ready " + THREE.REVISION )
 

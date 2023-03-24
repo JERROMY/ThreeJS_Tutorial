@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GrassShaderMaterial } from '../materials/MaterialsGrassStart.js';
-import { shadersMap, loadShader } from '../ShaderGrassStart.js';
+import { shadersMap, loadShader } from '../shaders/ShaderGrassStart.js';
 
 // Step 1: Create a Grass Class
 class GrassField extends THREE.Group {

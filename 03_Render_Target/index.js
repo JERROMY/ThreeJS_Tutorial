@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { GrassShaderMaterial } from '../materials/MaterialsGrassStart.js';
-import { shadersMap, loadShader } from '../shaders/ShaderGrassStart.js';
-import { GrassField } from './grass.js';
+import { RenderTargetShaderMaterial } from '../materials/MaterialsRenderTarget.js';
+import { shadersMap, loadShader } from '../shaders/ShaderRenderTarget.js';
 
 console.log( "Three JS Ready " + THREE.REVISION )
 
@@ -11,28 +10,41 @@ let scene;
 let renderer;
 
 let box;
-let grassField;
 
 loadShader( start );
 
 function init(){
 
-    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 10000 );
-	camera.position.z = 4;
-    //camera.position.x = 1.5;
-    camera.position.y = 1.5;
-    camera.lookAt( new THREE.Vector3(0, 0, 0) );
+    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
+	camera.position.z = 5;
+    camera.position.y = 5;
 
 	scene = new THREE.Scene();
 
     const group = new THREE.Group();
 	scene.add( group );
+    scene.background = new THREE.Color( 0x222222 );
 
-    const gridHelper = new THREE.GridHelper( 10, 10 );
-    scene.add( gridHelper );
+    const helper = new THREE.GridHelper( 10, 10 );
+	//helper.rotation.x = Math.PI / 2;
+	group.add( helper );
+    helper.visible = true;
 
-    grassField = new GrassField();
-    scene.add( grassField );
+
+    //const boxGeo = new THREE.BoxGeometry( 1, 1, 1 );
+	//const boxMat = new THREE.MeshBasicMaterial( { color: 0xCCCCCC, wireframe: true } );
+
+    const basicMat = RenderTargetShaderMaterial( shadersMap );
+
+    const planeGeo = new THREE.PlaneGeometry( 2, 2 );
+    const plane = new THREE.Mesh( planeGeo, basicMat );
+    scene.add( plane );
+    //plane.rotation.x = Math.PI / 2;
+
+	//const boxMesh = new THREE.Mesh( boxGeo, basicMat );
+    //box = boxMesh;
+	//group.add( boxMesh );
+
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setPixelRatio( window.devicePixelRatio );
@@ -42,8 +54,6 @@ function init(){
     const controls = new OrbitControls( camera, renderer.domElement );
 	controls.minDistance = 2;
 	controls.maxDistance = 40;
-
-    
 
     window.addEventListener( 'resize', onWindowResize );
 
@@ -64,19 +74,17 @@ function onWindowResize() {
 }
 
 
-function animate( deltaTime ) {
+function animate() {
 
     requestAnimationFrame( animate );
-    render( deltaTime );
+    render();
 
 }
 
-function render( dt ){
+function render(){
 
-   //box.rotation.y += 0.01;
+    //box.rotation.y += 0.01;
 
-    if( grassField ){
-        grassField.update( dt )
-    }
+
     renderer.render( scene, camera );
 }

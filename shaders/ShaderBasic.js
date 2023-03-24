@@ -1,4 +1,4 @@
-const basic_shader_url = '../shaders/'
+const basic_shader_url = '../shaders/';
 const shaderURLs = [
     basic_shader_url + 'basic.vert',
     basic_shader_url + 'basic.frag',

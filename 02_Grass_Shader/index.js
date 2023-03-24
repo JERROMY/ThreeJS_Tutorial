@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GrassShaderMaterial } from '../materials/MaterialsGrass.js';
-import { shadersMap, loadShader } from '../ShaderGrass.js';
+import { shadersMap, loadShader } from '../shaders/ShaderGrass.js';
 import { GrassField } from './grass.js';
 
 console.log( "Three JS Ready " + THREE.REVISION )
