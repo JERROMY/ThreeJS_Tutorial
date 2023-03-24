@@ -18,8 +18,10 @@ loadShader( start );
 function init(){
 
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 10000 );
-	camera.position.z = 5;
-    camera.position.y = 5;
+	camera.position.z = 4;
+    //camera.position.x = 1.5;
+    camera.position.y = 1.5;
+    camera.lookAt( new THREE.Vector3(0, 0, 0) );
 
 	scene = new THREE.Scene();
 
