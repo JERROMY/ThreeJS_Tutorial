@@ -29,4 +29,22 @@ function RenderTargetShaderMaterial( shaders ){
     return randerTargetShaderMaterial;
 }
 
-export { RenderTargetShaderMaterial };
+function createRenderTargetShader( shaders ){
+
+    const RenderTarget_VS = shaders.get('RenderTarget_VS');
+    const RenderTarget_FS = shaders.get('RenderTarget_FS');
+
+    const RenderTargetShader = {
+        uniforms : {
+            tDiffuse: { value: null }
+        },
+        vertexShader : RenderTarget_VS,
+        fragmentShader: RenderTarget_FS,
+
+    }
+
+    return RenderTargetShader;
+
+}
+
+export { RenderTargetShaderMaterial, createRenderTargetShader };

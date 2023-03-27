@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { RenderTargetShaderMaterial } from '../materials/MaterialsRenderTarget.js';
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { RenderTargetShaderMaterial, createRenderTargetShader } from '../materials/MaterialsRenderTarget.js';
+
 import { shadersMap, loadShader } from '../shaders/ShaderRenderTarget.js';
 
 console.log( "Three JS Ready " + THREE.REVISION )
@@ -8,6 +12,7 @@ console.log( "Three JS Ready " + THREE.REVISION )
 let camera;
 let scene;
 let renderer;
+let composer;
 
 let box;
 
@@ -30,20 +35,23 @@ function init(){
 	group.add( helper );
     helper.visible = true;
 
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    scene.add(light);
+    light.position.set(1.7, 1, -1);
 
-    //const boxGeo = new THREE.BoxGeometry( 1, 1, 1 );
-	//const boxMat = new THREE.MeshBasicMaterial( { color: 0xCCCCCC, wireframe: true } );
 
-    const basicMat = RenderTargetShaderMaterial( shadersMap );
+    const boxGeo = new THREE.BoxGeometry( 1, 1, 1 );
+	const boxMat = new THREE.MeshStandardMaterial( { color: 0xFF0000 } );
+    const boxMesh = new THREE.Mesh( boxGeo, boxMat );
+    box = boxMesh;
+	group.add( boxMesh );
 
-    const planeGeo = new THREE.PlaneGeometry( 2, 2 );
-    const plane = new THREE.Mesh( planeGeo, basicMat );
-    scene.add( plane );
+
+    //const basicMat = RenderTargetShaderMaterial( shadersMap );
+    //const planeGeo = new THREE.PlaneGeometry( 2, 2 );
+    //const plane = new THREE.Mesh( planeGeo, basicMat );
+    //scene.add( plane );
     //plane.rotation.x = Math.PI / 2;
-
-	//const boxMesh = new THREE.Mesh( boxGeo, basicMat );
-    //box = boxMesh;
-	//group.add( boxMesh );
 
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -55,7 +63,32 @@ function init(){
 	controls.minDistance = 2;
 	controls.maxDistance = 40;
 
+    initPostEffect();
+
     window.addEventListener( 'resize', onWindowResize );
+
+}
+
+function initPostEffect(){
+
+    //Post Processing
+    const depthTexture = new THREE.DepthTexture();
+    const renderTarget = new THREE.WebGLRenderTarget(
+        window.innerWidth,
+        window.innerHeight,
+        {
+            depthTexture: depthTexture,
+            depthBuffer: true,
+        }
+    );
+
+    const renderTargetShader = createRenderTargetShader( shadersMap );
+    const renderTargetPass = new ShaderPass( renderTargetShader );
+
+    composer = new EffectComposer( renderer, renderTarget );
+    const pass = new RenderPass(scene, camera);
+    composer.addPass( pass );
+    composer.addPass( renderTargetPass );
 
 }
 
@@ -70,6 +103,7 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 
     renderer.setSize( window.innerWidth, window.innerHeight );
+    composer.setSize(window.innerWidth, window.innerHeight);
 
 }
 
@@ -86,5 +120,6 @@ function render(){
     //box.rotation.y += 0.01;
 
 
-    renderer.render( scene, camera );
+    //renderer.render( scene, camera );
+    composer.render();
 }
