@@ -4,7 +4,7 @@ import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { RenderTargetShaderMaterial, createRenderTargetShader } from '../materials/MaterialsRenderTarget.js';
-
+import { CustomPass } from './CustomPass.js';
 import { shadersMap, loadShader } from '../shaders/ShaderRenderTarget.js';
 
 console.log( "Three JS Ready " + THREE.REVISION )
@@ -13,12 +13,19 @@ let camera;
 let scene;
 let renderer;
 let composer;
+let res;
 
 let box;
+
+let customPass;
 
 loadShader( start );
 
 function init(){
+
+    res = new THREE.Vector2();
+    res.x = window.innerWidth;
+    res.y = window.innerHeight;
 
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
 	camera.position.z = 5;
@@ -64,6 +71,9 @@ function init(){
 	controls.maxDistance = 40;
 
     initPostEffect();
+    onWindowResize();
+    
+    
 
     window.addEventListener( 'resize', onWindowResize );
 
@@ -82,13 +92,17 @@ function initPostEffect(){
         }
     );
 
-    const renderTargetShader = createRenderTargetShader( shadersMap );
-    const renderTargetPass = new ShaderPass( renderTargetShader );
+    customPass = new CustomPass( res, scene, camera, shadersMap );
+
+    //const renderTargetShader = createRenderTargetShader( shadersMap );
+    //const renderTargetPass = new ShaderPass( renderTargetShader );
+    //composer.addPass( renderTargetPass );
 
     composer = new EffectComposer( renderer, renderTarget );
     const pass = new RenderPass(scene, camera);
     composer.addPass( pass );
-    composer.addPass( renderTargetPass );
+    composer.addPass( customPass );
+    
 
 }
 
@@ -99,11 +113,17 @@ function start(){
 
 function onWindowResize() {
 
+    res.x = window.innerWidth;
+    res.y = window.innerHeight;
+
+    //console.log( res );
+
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize( window.innerWidth, window.innerHeight );
     composer.setSize(window.innerWidth, window.innerHeight);
+    customPass.setSize( window.innerWidth, window.innerHeight );
 
 }
 

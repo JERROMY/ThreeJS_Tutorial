@@ -3,6 +3,9 @@ import * as THREE from 'three';
 function RenderTargetShaderMaterial( shaders ){
 
     const uniforms = {
+        sceneColorBuffer: { value: null },
+        normalBuffer: { value: null },
+        screenSize: { value: null },
     };
 
     const RenderTarget_VS = shaders.get('RenderTarget_VS');
@@ -11,7 +14,7 @@ function RenderTargetShaderMaterial( shaders ){
     //console.log( Basic_VS )
     //console.log( Basic_FS )
 
-    const randerTargetShaderMaterial = new THREE.RawShaderMaterial( {
+    const randerTargetShaderMaterial = new THREE.ShaderMaterial( {
 
         uniforms: uniforms,
         vertexShader: RenderTarget_VS,
@@ -28,6 +31,7 @@ function RenderTargetShaderMaterial( shaders ){
 
     return randerTargetShaderMaterial;
 }
+
 
 function createRenderTargetShader( shaders ){
 
