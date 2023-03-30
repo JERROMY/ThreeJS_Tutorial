@@ -16,12 +16,20 @@ class CustomPass extends Pass {
       this.fsQuad = new FullScreenQuad( null );
       this.fsQuad.material = RenderTargetShaderMaterial( this.shaders );
       this.fsQuad.material.uniforms.screenSize.value = new THREE.Vector4( resolution.x, resolution.y, 1/resolution.x, 1/resolution.y );
+      this.fsQuad.material.uniforms.cameraNear.value = camera.near;
+      this.fsQuad.material.uniforms.cameraFar.value = camera.far;
+      
+      
       //console.log( this.fsQuad.material );
 
       const normalTarget = new THREE.WebGLRenderTarget(
         this.resolution.x,
         this.resolution.y
       );
+
+
+
+
       normalTarget.texture.format = THREE.RGBAFormat;
       normalTarget.texture.minFilter = THREE.NearestFilter;
       normalTarget.texture.magFilter = THREE.NearestFilter;
@@ -46,6 +54,13 @@ class CustomPass extends Pass {
         this.resolution.set(width, height);
         this.normalTarget.setSize(width, height);
 
+        this.fsQuad.material.uniforms.screenSize.value.set(
+            this.resolution.x,
+            this.resolution.y,
+            1 / this.resolution.x,
+            1 / this.resolution.y
+        );
+
     }
 
     render(renderer, writeBuffer, readBuffer) {
@@ -55,13 +70,23 @@ class CustomPass extends Pass {
         //console.log( "render" );
         //const overrideMaterialValue = this.renderScene.overrideMaterial;
 
-        //const depthBufferValue = writeBuffer.depthBuffer;
-        //writeBuffer.depthBuffer = false;
+        const depthBufferValue = writeBuffer.depthBuffer;
+        writeBuffer.depthBuffer = false;
 
-        renderer.setRenderTarget( this.normalTarget );
-
-
+        renderer.setRenderTarget(this.normalTarget);
+        const overrideMaterialValue = this.renderScene.overrideMaterial;
+        this.renderScene.overrideMaterial = this.normalOverrideMaterial;
         renderer.render(this.renderScene, this.renderCamera);
+        this.renderScene.overrideMaterial = overrideMaterialValue;
+
+
+        this.fsQuad.material.uniforms["depthBuffer"].value = readBuffer.depthTexture;
+        this.fsQuad.material.uniforms["normalBuffer"].value = this.normalTarget.texture;
+
+        //renderer.setRenderTarget( this.normalTarget );
+
+
+        //renderer.render(this.renderScene, this.renderCamera);
 
 
         this.fsQuad.material.uniforms["sceneColorBuffer"].value = readBuffer.texture;
@@ -71,9 +96,11 @@ class CustomPass extends Pass {
             renderer.setRenderTarget(null);
             this.fsQuad.render(renderer);
         } else {
-            //renderer.setRenderTarget(writeBuffer);
-            //this.fsQuad.render(renderer);
+            renderer.setRenderTarget(writeBuffer);
+            this.fsQuad.render(renderer);
         }
+
+        writeBuffer.depthBuffer = depthBufferValue;
 
 
         

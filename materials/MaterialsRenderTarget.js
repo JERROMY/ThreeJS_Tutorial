@@ -5,7 +5,10 @@ function RenderTargetShaderMaterial( shaders ){
     const uniforms = {
         sceneColorBuffer: { value: null },
         normalBuffer: { value: null },
+        depthBuffer: { value: null },
         screenSize: { value: null },
+        cameraNear: { value: null },
+        cameraFar: { value: null },
     };
 
     const RenderTarget_VS = shaders.get('RenderTarget_VS');
@@ -39,9 +42,11 @@ function createRenderTargetShader( shaders ){
     const RenderTarget_FS = shaders.get('RenderTarget_FS');
 
     const RenderTargetShader = {
+        
         uniforms : {
             tDiffuse: { value: null }
         },
+
         vertexShader : RenderTarget_VS,
         fragmentShader: RenderTarget_FS,
 

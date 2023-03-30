@@ -27,9 +27,8 @@ function init(){
     res.x = window.innerWidth;
     res.y = window.innerHeight;
 
-    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.z = 5;
-    camera.position.y = 5;
+    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 1000 );
+	camera.position.set(0, 0, 4);
 
 	scene = new THREE.Scene();
 
@@ -37,21 +36,44 @@ function init(){
 	scene.add( group );
     scene.background = new THREE.Color( 0x222222 );
 
-    const helper = new THREE.GridHelper( 10, 10 );
+    //const helper = new THREE.GridHelper( 10, 10 );
 	//helper.rotation.x = Math.PI / 2;
-	group.add( helper );
-    helper.visible = true;
+	//group.add( helper );
+    //helper.visible = true;
 
     const light = new THREE.DirectionalLight(0xffffff, 1);
     scene.add(light);
     light.position.set(1.7, 1, -1);
 
 
-    const boxGeo = new THREE.BoxGeometry( 1, 1, 1 );
+    const boxGeo = new THREE.BoxGeometry(1, 1, 1);
 	const boxMat = new THREE.MeshStandardMaterial( { color: 0xFF0000 } );
     const boxMesh = new THREE.Mesh( boxGeo, boxMat );
     box = boxMesh;
 	group.add( boxMesh );
+
+    // const geometry = new THREE.TorusKnotGeometry( 1, 0.3, 128, 64 );
+    // const material = new THREE.MeshBasicMaterial( { color: 'blue' } );
+
+    // const count = 50;
+    // const scale = 5;
+
+    // for ( let i = 0; i < count; i ++ ) {
+
+    //     const r = Math.random() * 2.0 * Math.PI;
+    //     const z = ( Math.random() * 2.0 ) - 1.0;
+    //     const zScale = Math.sqrt( 1.0 - z * z ) * scale;
+
+    //     const mesh = new THREE.Mesh( geometry, material );
+    //     mesh.position.set(
+    //         Math.cos( r ) * zScale,
+    //         Math.sin( r ) * zScale,
+    //         z * scale
+    //     );
+    //     mesh.rotation.set( Math.random(), Math.random(), Math.random() );
+    //     group.add( mesh );
+
+    // }
 
 
     //const basicMat = RenderTargetShaderMaterial( shadersMap );
@@ -83,14 +105,13 @@ function initPostEffect(){
 
     //Post Processing
     const depthTexture = new THREE.DepthTexture();
-    const renderTarget = new THREE.WebGLRenderTarget(
-        window.innerWidth,
-        window.innerHeight,
-        {
-            depthTexture: depthTexture,
-            depthBuffer: true,
-        }
-    );
+    const renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight );
+    renderTarget.texture.minFilter = THREE.NearestFilter;
+    renderTarget.texture.magFilter = THREE.NearestFilter;
+    renderTarget.stencilBuffer = false;
+    renderTarget.depthTexture = new THREE.DepthTexture();
+    renderTarget.depthTexture.format = THREE.DepthFormat;
+    renderTarget.depthTexture.type = THREE.UnsignedShortType;
 
     customPass = new CustomPass( res, scene, camera, shadersMap );
 
@@ -137,7 +158,9 @@ function animate() {
 
 function render(){
 
-    //box.rotation.y += 0.01;
+    box.rotation.y += 0.01;
+
+
 
 
     //renderer.render( scene, camera );
