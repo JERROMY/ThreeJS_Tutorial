@@ -46,34 +46,34 @@ function init(){
     light.position.set(1.7, 1, -1);
 
 
-    const boxGeo = new THREE.BoxGeometry(1, 1, 1);
-	const boxMat = new THREE.MeshStandardMaterial( { color: 0xFF0000 } );
-    const boxMesh = new THREE.Mesh( boxGeo, boxMat );
-    box = boxMesh;
-	group.add( boxMesh );
+    // const boxGeo = new THREE.BoxGeometry(1, 1, 1);
+	// const boxMat = new THREE.MeshStandardMaterial( { color: 0xFF0000 } );
+    // const boxMesh = new THREE.Mesh( boxGeo, boxMat );
+    // box = boxMesh;
+	// group.add( boxMesh );
 
-    // const geometry = new THREE.TorusKnotGeometry( 1, 0.3, 128, 64 );
-    // const material = new THREE.MeshBasicMaterial( { color: 'blue' } );
+    const geometry = new THREE.TorusKnotGeometry( 1, 0.3, 128, 64 );
+    const material = new THREE.MeshBasicMaterial( { color: 'blue' } );
 
-    // const count = 50;
-    // const scale = 5;
+    const count = 50;
+    const scale = 5;
 
-    // for ( let i = 0; i < count; i ++ ) {
+    for ( let i = 0; i < count; i ++ ) {
 
-    //     const r = Math.random() * 2.0 * Math.PI;
-    //     const z = ( Math.random() * 2.0 ) - 1.0;
-    //     const zScale = Math.sqrt( 1.0 - z * z ) * scale;
+        const r = Math.random() * 2.0 * Math.PI;
+        const z = ( Math.random() * 2.0 ) - 1.0;
+        const zScale = Math.sqrt( 1.0 - z * z ) * scale;
 
-    //     const mesh = new THREE.Mesh( geometry, material );
-    //     mesh.position.set(
-    //         Math.cos( r ) * zScale,
-    //         Math.sin( r ) * zScale,
-    //         z * scale
-    //     );
-    //     mesh.rotation.set( Math.random(), Math.random(), Math.random() );
-    //     group.add( mesh );
+        const mesh = new THREE.Mesh( geometry, material );
+        mesh.position.set(
+            Math.cos( r ) * zScale,
+            Math.sin( r ) * zScale,
+            z * scale
+        );
+        mesh.rotation.set( Math.random(), Math.random(), Math.random() );
+        group.add( mesh );
 
-    // }
+    }
 
 
     //const basicMat = RenderTargetShaderMaterial( shadersMap );
@@ -158,7 +158,7 @@ function animate() {
 
 function render(){
 
-    box.rotation.y += 0.01;
+    //box.rotation.y += 0.01;
 
 
 
